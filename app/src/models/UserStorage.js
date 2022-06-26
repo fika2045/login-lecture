@@ -21,11 +21,10 @@ class UserStorage {
 //         name: ["김승재", "조한주", "김지우"],
 // };
 
-//받아오는 변수 갯수를 모를때 ...변수명
-//이부분 로직을 나중에 확인 필요함 ##############
-//지금은 사용하는 곳이 없음
-static getUsers(...fields) {
-    // const users = this.#users;
+
+static #getUsers(data, isAll, fields) {
+    const users = JSON.parse(data);
+    if(isAll) return users;
     const newUsers = fields.reduce((newUsers, field) => {
         if(users.hasOwnProperty(field)) {
  //           console.log(newUsers[field], users[field], field);
@@ -35,6 +34,19 @@ static getUsers(...fields) {
         return newUsers;
     }, {}); 
     return newUsers;
+}
+
+
+//받아오는 변수 갯수를 모를때 ...변수명
+//이부분 로직을 나중에 확인 필요함 ##############
+static getUsers(isAll, ...fields) {
+    // const users = this.#users;
+    return fs.readFile("./src/databases/users.json")
+    .then((data) => {
+        return this.#getUsers(data, isAll, fields);
+    })
+    .catch(console.error);
+
 }
 
     static getUserInfo(id) {
@@ -48,11 +60,22 @@ static getUsers(...fields) {
     }
 
     
-    static save(userInfo){
+    static async save(userInfo){
+        //클래스에 데이터 사용시 사용했던 코드 파일 시스템으로 수정 후 주석처리됨
         // const users = this.#users;
-        users.id.push(userInfo.id);
-        users.name.push(userInfo.name);
-        users.psword.push(userInfo.psword);
+        // users.id.push(userInfo.id);
+        // users.name.push(userInfo.name);
+        // users.psword.push(userInfo.psword);
+        // return { success: true};
+        const users = await this.getUsers(true);
+        if (users.id.includes(userInfo.id)){
+            throw "이미 존재하는 아이디입니다.";
+        }
+            users.id.push(userInfo.id);
+            users.name.push(userInfo.name);
+            users.psword.push(userInfo.psword);
+        
+        fs.writeFile("./src/databases/users.json", JSON.stringify(users));
         return { success: true};
     }
 }
