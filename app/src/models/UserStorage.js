@@ -10,6 +10,7 @@ class UserStorage {
 
 //받아오는 변수 갯수를 모를때 ...변수명
 //이부분 로직을 나중에 확인 필요함 ##############
+//지금은 사용하는 곳이 없음
 static getUsers(...fields) {
     const users = this.#users;
     const newUsers = fields.reduce((newUsers, field) => {
@@ -33,6 +34,14 @@ static getUsers(...fields) {
         }, {});
 
         return userInfo;
+    }
+
+    static save(userInfo){
+        const users = this.#users;
+        users.id.push(userInfo.id);
+        users.name.push(userInfo.name);
+        users.psword.push(userInfo.psword);
+        console.log(users);
     }
 }
 
