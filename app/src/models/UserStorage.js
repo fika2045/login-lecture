@@ -1,82 +1,37 @@
 "use strict";
 
 const fs = require("fs").promises;
+const db = require("../config/db");
 
 class UserStorage {
-    static #getUserInfo(data, id) {
-        const users = JSON.parse(data);
-        const idx = users.id.indexOf(id);
-        const usersKeys = Object.keys(users);
-        const userInfo = usersKeys.reduce((newUser, info) =>{
-        newUser[info] = users[info][idx];
-        return newUser;
-    }, {});
-
-    return userInfo;
-    }
-    // '#' 은 private 로 선언하기 위한것  
-//     static #users = {
-//         id: ["tlpr", "finnala", "jiwoo0815"],
-//         psword: ["1234", "12345", "123456"],
-//         name: ["김승재", "조한주", "김지우"],
-// };
-
-
-static #getUsers(data, isAll, fields) {
-    const users = JSON.parse(data);
-    if(isAll) return users;
-    const newUsers = fields.reduce((newUsers, field) => {
-        if(users.hasOwnProperty(field)) {
- //           console.log(newUsers[field], users[field], field);
-            newUsers[field] = users[field];
-         
-        }
-        return newUsers;
-    }, {}); 
-    return newUsers;
-}
-
-
-//받아오는 변수 갯수를 모를때 ...변수명
-//이부분 로직을 나중에 확인 필요함 ##############
-static getUsers(isAll, ...fields) {
-    // const users = this.#users;
-    return fs.readFile("./src/databases/users.json")
-    .then((data) => {
-        return this.#getUsers(data, isAll, fields);
-    })
-    .catch(console.error);
-
-}
 
     static getUserInfo(id) {
-        // const users = this.#users;
-        return fs.readFile("./src/databases/users.json")
-        .then((data) => {
-            return this.#getUserInfo(data, id);
-        })
-        .catch(console.error);
-        
+        //Promise 내부 구문이 성공하면 resolve, 실패하면 reject
+        return new Promise((resolve, reject) => {
+            const query = "SELECT * FROM users where id = ?";
+            db.query(query, [id], (err, data) => {
+                if(err) reject(err.message);
+                //db 결과 배열로 데이터가 넘어오는데 데이터는 하나밖에 없으므로 첫번째 데이터를 반환한다. 
+                resolve(data[0]);        
+            });
+        });
     }
 
     
     static async save(userInfo){
-        //클래스에 데이터 사용시 사용했던 코드 파일 시스템으로 수정 후 주석처리됨
-        // const users = this.#users;
-        // users.id.push(userInfo.id);
-        // users.name.push(userInfo.name);
-        // users.psword.push(userInfo.psword);
-        // return { success: true};
-        const users = await this.getUsers(true);
-        if (users.id.includes(userInfo.id)){
-            throw "이미 존재하는 아이디입니다.";
-        }
-            users.id.push(userInfo.id);
-            users.name.push(userInfo.name);
-            users.psword.push(userInfo.psword);
-        
-        fs.writeFile("./src/databases/users.json", JSON.stringify(users));
-        return { success: true};
+        //Promise 내부 구문이 성공하면 resolve, 실패하면 reject
+        return new Promise((resolve, reject) => {
+            const query = "INSERT INTO users(id, name, psword) VALUES (?,?,?);";
+            db.query(
+                query, 
+                [userInfo.id, userInfo.name, userInfo.psword], 
+                (err) => {
+                if(err) reject(err.message);
+                //db 결과 배열로 데이터가 넘어오는데 데이터는 하나밖에 없으므로 첫번째 데이터를 반환한다. 
+                resolve ({success: true});        
+            });
+        });
+
     }
 }
 

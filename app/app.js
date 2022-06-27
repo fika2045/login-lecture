@@ -2,8 +2,10 @@
 //모듈
 const express = require("express");
 const bodyParser = require("body-parser");
-const app = express();
+const dotenv = require("dotenv");
+dotenv.config();
 
+const app = express();
 //const PORT = 3000;
 
 //라우팅 : 주소를 받아서 routes/home 으로 보내서 열어줘야하는 화면 열어줌
