@@ -1,6 +1,8 @@
 "use strict";
 
 const UserStorage = require("./UserStorage");
+const bcrypt = require("bcrypt");
+const saltRounds = 10;
 
 class User {
     constructor(body) {
@@ -12,10 +14,10 @@ class User {
         //await 은 promise 객체에서만 쓸수 있다.
         //또한 await 은 async 함수에서만 사용가능해서 login 을 async 함수로 선언함
         try{
-            const { id, psword } = await UserStorage.getUserInfo(client.id);
-
-            if(id){
-                if (id === client.id && psword === client.psword){
+            const user = await UserStorage.getUserInfo(client.id);
+         
+            if(user){
+                if (user.id === client.id && bcrypt.compareSync(client.psword,user.psword)){
                     return { success: true};
                 }
                 return {success: false, msg: "비밀번호가 틀렸습니다."};
@@ -31,11 +33,26 @@ class User {
     async register() {
         const client = this.body;
         try {
-        const response = await UserStorage.save(client);
-        return response; 
-        } catch (err) {
+                //동기화로 암호화
+                const salt = bcrypt.genSaltSync(saltRounds);
+                const hash = bcrypt.hashSync(client.psword,salt);
+                client.psword = hash;
+
+                const response = await UserStorage.save(client);
+                return response;
+
+        } catch(err) {
             return { success: false, msg: err};
         }
+
+
+        // const client = this.body;
+        // try {
+        // const response = await UserStorage.save(client);
+        // return response; 
+        // } catch (err) {
+        //     return { success: false, msg: err};
+        // }
     }
 }
 
