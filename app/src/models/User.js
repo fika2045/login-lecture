@@ -45,7 +45,9 @@ class User {
                 return response;
 
         } catch(err) {
-            return { success: false, msg: err};
+            if(err.errno == 1062)
+                return {success: false, msg: "중복 아이디 : 다른 아이디를 입력해주세요" }
+            return { success: false, msg: err.msg};
         }
 
 

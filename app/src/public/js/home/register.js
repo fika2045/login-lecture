@@ -36,7 +36,8 @@ fetch("/register", {
     .then((res) => {
         if (res.success){
             location.href ="/login";
-        } else {
+        } 
+        else {
             alert(res.msg);
         }
     })

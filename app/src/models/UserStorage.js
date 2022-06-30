@@ -26,7 +26,7 @@ class UserStorage {
                 query, 
                 [userInfo.id, userInfo.name, userInfo.psword], 
                 (err) => {
-                if(err) reject(err.message);
+                if(err) reject({errno:err.errno, msg:err.message});
                 //db 결과 배열로 데이터가 넘어오는데 데이터는 하나밖에 없으므로 첫번째 데이터를 반환한다. 
                 resolve ({success: true});        
             });
