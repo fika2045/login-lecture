@@ -4,6 +4,7 @@
 //const { response } = require("../../../app");
 const UserStorage = require("../../models/UserStorage");
 const User = require("../../models/User");
+const { addListener } = require("../../config/db");
 
 const output = {
     
@@ -24,7 +25,12 @@ const output = {
         } else { res.render("home/login")};
     },
     register : (req, res) => {
-        res.render("home/register");
+        if(req.session.user) {
+            res.render("home/index", {
+                id:req.session.user.id, 
+                name: req.session.user.name});    
+        } else { res.render("home/register")};
+
     },
     logout : (req, res) => {
         if(req.session.user) {

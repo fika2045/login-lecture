@@ -13,9 +13,9 @@
     <div class="login-page">
         <div class="form">
           <form class="login-form">
-            <input id="id" type="text" placeholder="아이디"/>
-            <input id="psword" type="password" placeholder="비밀번호"/>
-            <p id="button">login</p>
+            <input id="id" name = "user_id" type="text" placeholder="아이디" onkeydown="if(event.keyCode == 13) user_psword.focus();" />
+            <input id="psword" name = "user_psword" type="password" placeholder="비밀번호" />
+            <p id="button" name ="login_button">login</p>
             <p class="message">Not registered? <a href="/register">Create an account</a></p>
           </form>
         </div>

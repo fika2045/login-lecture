@@ -13,10 +13,10 @@
     <div class="login-page">
         <div class="form">
           <form class="login-form">
-            <input id="id" type="text" placeholder="아이디"/>
-            <input id="name" type="text" placeholder="이름"/>
-            <input id="psword" type="password" placeholder="비밀번호"/>
-            <input id="confirm-psword" type="password" placeholder="비밀번호 확인"/>
+            <input id="id" name = "user_id" type="text" placeholder="아이디" onkeydown="if(event.keyCode == 13) user_name.focus();" />
+            <input id="name" name = "user_name" type="text" placeholder="이름" onkeydown="if(event.keyCode == 13) user_psword.focus();" />
+            <input id="psword" name = "user_psword" type="password" placeholder="비밀번호" onkeydown="if(event.keyCode == 13) user_confirm_psword.focus();" />
+            <input id="confirm-psword" name = "user_confirm_psword" type="password" placeholder="비밀번호 확인" />
             <p id="button">Sign Up</p>
             <p class="message">Already registered? <a href="/login">login</a></p>
           </form>

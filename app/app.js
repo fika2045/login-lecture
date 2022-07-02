@@ -33,7 +33,9 @@ app.use(expressSession({
     saveUninitialized:true
 }));
 
-app.use("/", home); 
+app.use("/", home);  
+
+
 
 
 module.exports = app;
