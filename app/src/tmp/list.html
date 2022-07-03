@@ -13,7 +13,7 @@
         <div class="container">
             <h2>상품테이블</h2>
 
-            <a href="/insert">추가하기</a>
+            <a href="/product/insert">추가하기</a>
             <br>
             <br>
             <p>상품테이블 목록입니다.</p>
@@ -37,7 +37,7 @@
                                 <%= item.id %>
                             </td>
                             <td>
-                                <a href='/detail/<%= item.id %>'><%= item.name %></a>
+                                <a href='/product/detail/<%= item.id %>'><%= item.name %></a>
                             </td>
                             <td>
                                 <%= item.modelnumber %>
@@ -45,12 +45,13 @@
                             <td>
                                 <%= item.series %>
                             </td>
-                            <td>
-                                <a href="/delete/<%= item.id %>">삭제</a>
+                             <td>
+                                <a href="../edit/<%= item.id %>">수정</a>
                             </td>
                             <td>
-                                <a href="/edit/<%= item.id %>">수정</a>
+                                <a href="../delete/<%= item.id %>">삭제</a>
                             </td>
+
                         </tr>
                     <% })%>
                 </tbody>
@@ -79,7 +80,7 @@
                         %>
                     
                         <li value="(startPage -1)" class="previous">
-                        <a href='/pasing/<%= ( startPage - 1) %>'>이전페이지</a>
+                        <a href='/product/pasing/<%= ( startPage - 1) %>'>이전페이지</a>
                     </li>
 
                 <%
@@ -95,7 +96,7 @@
                     %>
                     
                     <li value=<%= i %> class=''>
-                        <a href='/pasing/<%= i %>'>
+                        <a href='/product/pasing/<%= i %>'>
                             <%= i %>
                         </a>
                     </li>
@@ -105,7 +106,7 @@
                     %>
                     
                     <li value=<%= i %> class='active'>
-                        <a href='/pasing/<%= i %>'>
+                        <a href='/product/pasing/<%= i %>'>
                             <%= i %>
                         </a>
                     </li>
@@ -123,7 +124,7 @@
                 %>
 
                 <li value="( endPage + 1)" class="next">
-                    <a href='/pasing/<%= ( endPage + 1) %>'>다음페이지</a>
+                    <a href='/product/pasing/<%= ( endPage + 1) %>'>다음페이지</a>
                 </li>
 
             <%

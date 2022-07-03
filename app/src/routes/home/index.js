@@ -17,4 +17,18 @@ router.get("/logout", ctrl.output.logout);
 router.post("/login", ctrl.process.login);
 router.post("/register", ctrl.process.register);
 
+
+//상품페이지 
+router.get("/product/pasing/:cur", ctrl.product.pasing);
+router.get("/product/main", ctrl.product.main);
+router.get("/product/delete/:id", ctrl.product.delete);
+router.get("/product/insert", ctrl.product.insert);
+router.get("/product/detail/:id", ctrl.product.detail);
+router.get("/product/edit/:id", ctrl.product.edit);
+
+router.post("/product/insert", ctrl.process.insert);
+router.post("/product/edit/:id", ctrl.process.edit);
+
+
+
 module.exports = router; 
