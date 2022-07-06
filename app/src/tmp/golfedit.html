@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
     <head>
-        <title>물품관리</title>
+        <title>거제뷰cc 7/8 라운딩</title>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
@@ -10,8 +10,8 @@
     </head>
     <body>
         <div class="container">
-            <h2>상품수정</h2>
-            <p>나는 날마다 점점 더 좋아진다.</p>
+            <h2>수정</h2>
+            <p>깨백을 향해!!!</p>
             <form method="POST">
                 <div class="form-group">
                     <label for="hole">Hole :</label>
@@ -23,11 +23,11 @@
                 </div>
                 <div class="form-group">
                     <label for="shot">Shot</label>
-                    <input type="text" class="form-control" id="shot" name="shot" value="<%= data.shot%>" >
+                    <input type="number" class="form-control" id="shot" name="shot" value="<%= data.shot%>" >
                 </div>
                 <div class="form-group">
                     <label for="putt">Putt</label>
-                    <input type="text" class="form-control" id="putt" name="putt" value="<%= data.putt%>" >
+                    <input type="number" class="form-control" id="putt" name="putt" value="<%= data.putt%>" >
                 </div>
                 <div class="form-group">
                     <label for="review">review</label>
@@ -49,6 +49,8 @@
                     <label for="section">분류</label>
                     <input type="text" class="form-control" id="section" name="section" value="<%= data.series%>">
                 </div> -->
+
+
                 <button type="submit" class="btn btn-success">수정하기</button>
             </form>
         </div>
