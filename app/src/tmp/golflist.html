@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="ko">
+    <head>
+        <title>Bootstrap Example</title>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    </head>
+
+    <body>
+        <div class="container">
+            <h2>거제뷰cc 7/8 라운딩</h2>
+
+            <br>
+            <br>
+            <p>Score Board</p>
+
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>Hole</th>
+                        <th>Par</th>
+                        <th>shot</th>
+                        <th>putt</th>
+                        <th>score</th>
+                        <th>review</th>
+                        <th>수정</th>
+                        <!-- <th>삭제</th> -->
+                    </tr>
+                </thead>
+                <tbody>
+
+                    <% data.forEach(function (item,index){ %>
+                        <tr>
+                            <td>
+                                <a href="/golf/detail/<%= item.holeno %>"><%= item.hole %></a>
+                            </td>
+                            <td>
+                                <%= item.par %></a>
+                            </td>
+                            <td>
+                                <%= item.shot %></a>
+                            </td>
+                            <td>
+                                <%= item.putt %>
+                            </td>
+                            <td>
+                                <%= item.shot + item.putt - item.par %>
+                            </td>
+                            <td>
+                                <%= item.review %>
+                            </td>
+                            <td>
+                                <a href="/golf/edit/<%= item.holeno %>">수정</a>
+                            </td>
+                            <!-- <td>
+                                <a href="../delete/<%= item.holeno %>">삭제</a>
+                            </td> -->
+
+                        </tr>
+                    <% })%>
+                </tbody>
+            </table>
+        </div>
+
+
+</body>
+<script>
+</script>
+
+</html>

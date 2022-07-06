@@ -160,19 +160,4 @@ router.get("/detail/:id", function (req, res) {
 
 )
 
-//mysql db 연결 함수
-var pool = mysql.createPool({
-    connectionLimit: 10,
-    host: 'localhost',
-    user: 'root',
-    database: 'wow',
-    password: '1111'
-})
-
-//디비 연결 함수
-function getConnection() {
-    return pool
-}
-    
-module.exports = router
 

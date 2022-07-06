@@ -85,7 +85,13 @@ const process = {
                 res.redirect('../main')
             })
     },
-
+    golfedit : (req, res) =>{
+        var body = req.body;
+        db.query('update golf_tmp2 set shot = ?, putt = ?, review = ? where holeno = ?',
+            [body.shot, body.putt, body.review, req.params.id], function () {
+                res.redirect('../list')
+            })
+    },
 
 }
 
@@ -222,9 +228,57 @@ const product = {
     }
 }
 
+const golf = {
+    list : (req, res) =>{
+        fs.readFile('src/tmp/golflist.html', 'utf-8', function (error, data) {
+            if (error) {
+                console.log("ejs오류" + error);
+                return
+            }
+            
+            var queryString = 'select * from golf_tmp2';
+
+            db.query(queryString, function (error, result) {
+                if (error) {
+                    console.log("페이징 에러" + error);
+                    return
+                }
+                //console.log(result);
+                res.send(ejs.render(data, {
+                    data: result
+                }));
+            });
+        })
+    },
+
+    detail : (req,res) => {
+        fs.readFile('src/tmp/golfdetail.html', 'utf-8', function (error, data) {
+            db.query('select * from golf_tmp2 where holeno = ?', [req.params.hole], function (error, result) {
+
+                res.send(ejs.render(data, {
+                    data: result[0]
+                }))
+            })
+        });
+    },
+
+    edit : (req,res) => {
+        fs.readFile('src/tmp/golfedit.html', 'utf-8', function (error, data) {
+            db.query('select * from golf_tmp2 where holeno = ?', [req.params.hole], function (error, result) {
+
+                res.send(ejs.render(data, {
+                    data: result[0]
+                }))
+            })
+        });
+    },
+     
+}
+
 
 module.exports = {
     output,
     process,
     product,
+    golf,
 }

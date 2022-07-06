@@ -29,6 +29,11 @@ router.get("/product/edit/:id", ctrl.product.edit);
 router.post("/product/insert", ctrl.process.insert);
 router.post("/product/edit/:id", ctrl.process.edit);
 
+router.get("/golf/list", ctrl.golf.list);
+router.get("/golf/detail/:hole", ctrl.golf.detail);
+router.get("/golf/edit/:hole", ctrl.golf.edit);
+
+router.post("/golf/edit/:id", ctrl.process.golfedit);
 
 
 module.exports = router; 

@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>물품상제</title>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    </head>
+    <body>
+        <div class="container">
+            <h2>상세보기</h2>
+            <p></p>
+            <form method="POST">
+                <div class="form-group">
+                    <label for="hole">Hole :</label>
+                    <input type="text" class="form-control" id="hole" name="hole" value="<%= data.hole%>" disabled>
+                </div>
+                <div class="form-group">
+                    <label for="par">Par:</label>
+                    <input type="text" class="form-control" id="par" name="par" value="<%= data.par%>" disabled>
+                </div>
+                <div class="form-group">
+                    <label for="shot">Shot</label>
+                    <input type="text" class="form-control" id="shot" name="shot" value="<%= data.shot%>" disabled>
+                </div>
+                <div class="form-group">
+                    <label for="putt">Putt</label>
+                    <input type="text" class="form-control" id="putt" name="putt" value="<%= data.putt%>" disabled>
+                </div>
+                <div class="form-group">
+                    <label for="score">score</label>
+                    <input type="text" class="form-control" id="score" name="score" value="<%= data.shot + data.putt - data.par%>" disabled>
+                </div>                <div class="form-group">
+                    <label for="review">review</label>
+                    <input type="text" class="form-control" id="review" name="review" value="<%= data.review%>" disabled>
+                </div>
+                <!-- <button type="submit" class="btn btn-success">수정하기</button> -->
+            </form>
+        </div>
+    </body>
+</html>
