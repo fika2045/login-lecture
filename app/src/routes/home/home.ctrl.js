@@ -67,7 +67,7 @@ const process = {
     },
 
     insert : (req, res) =>{
-        console.log("삽입 포스트 데이터 진행");
+//        console.log("삽입 포스트 데이터 진행");
         var body = req.body;
 
         db.query('insert into products(name,modelnumber,series) values (?,?,?)', [body.name, body.num, body.section], function () { 
@@ -79,6 +79,7 @@ const process = {
     edit : (req, res) =>{
         console.log("수정 포스트 진행");
         var body = req.body;
+        
         db.query('update products set name = ?, modelnumber = ?, series = ? where id = ?',
             [body.name, body.num, body.section, req.params.id], function () {
                 res.redirect('../main')
