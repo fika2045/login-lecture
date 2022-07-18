@@ -7,52 +7,111 @@
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.7.7/vue.min.js"></script>
+        <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+        <!-- <script src="https://unpkg.com/vue-router"></script> -->
     </head>
     <body>
-        <div class="container">
+        <div id= "app" class="container">
             <h2>수정</h2>
             <p>깨백을 향해!!!</p>
             <form method="POST">
                 <div class="form-group">
                     <label for="hole">Hole :</label>
-                    <input type="text" class="form-control" id="hole" name="hole" value="<%= data.hole%>" disabled>
+                    <input type="text" class="form-control" id="hole" name="hole" v-model ="hole" disabled>
                 </div>
                 <div class="form-group">
                     <label for="par">Par:</label>
-                    <input type="text" class="form-control" id="par" name="par" value="<%= data.par%>" disabled>
+                    <input type="text" class="form-control" id="par" name="par" v-model ="par" disabled>
                 </div>
                 <div class="form-group">
                     <label for="shot">Shot</label>
-                    <input type="number" class="form-control" id="shot" name="shot" value="<%= data.shot%>" >
+                    <input type="number" class="form-control" id="shot" name="shot" v-model ="shot">
                 </div>
                 <div class="form-group">
                     <label for="putt">Putt</label>
-                    <input type="number" class="form-control" id="putt" name="putt" value="<%= data.putt%>" >
+                    <input type="number" class="form-control" id="putt" name="putt" v-model ="putt" >
                 </div>
                 <div class="form-group">
                     <label for="review">review</label>
-                    <input type="text" class="form-control" id="review" name="review" value="<%= data.review%>" >
+                    <input type="text" class="form-control" id="review" name="review" v-model ="review" >
                 </div>
-                <!-- <div class="form-group">
-                    <label for="id">아이디:</label>
-                    <input type="text" class="form-control" id="id" name="id" value="<%= data.id%>" disabled>
-                </div>
-                <div class="form-group">
-                    <label for="name">상품이름:</label>
-                    <input type="text" class="form-control" id="name" name="name" value="<%= data.name%>">
-                </div>
-                <div class="form-group">
-                    <label for="num">번호</label>
-                    <input type="text" class="form-control" id="num" name="num" value="<%= data.modelnumber%>">
-                </div>
-                <div class="form-group">
-                    <label for="section">분류</label>
-                    <input type="text" class="form-control" id="section" name="section" value="<%= data.series%>">
-                </div> -->
+                <div>
+                    <select @change="addClub" v-model="selectedClub">
+                        <option value="">===클럽선택==</option>
+                        <option :value="clubs.club" :key="clubs.club" v-for="clubs in clubList">
+                            {{clubs.club}}
+                        </option>
 
+                    </select>
+                    <select @change="addAct" v-model="selectedAct">
+                        <option value="">===샷내용==</option>
+                        <option :value="acts.act" :key="acts.act" v-for="acts in actList">
+                            {{acts.act}}
+                        </option>
 
+                    </select>
+                </div>
+                <br><br>
                 <button type="submit" class="btn btn-success">수정하기</button>
             </form>
+            
         </div>
+        
+        
+        <script>
+            const app = new Vue({
+                el: "#app",
+                data: {
+                    hole :'<%=data.hole%>',
+                    par :'<%=data.par%>',
+                    shot :'<%=data.shot%>',
+                    putt :'<%=data.putt%>',
+                    review :'<%=data.review%>',
+                    clubList: [
+                        {club: '드라이버', code: '1'},
+                        {club: '우드', code: '2'},
+                        {club: '유틸리티', code: '3'},
+                        {club: '5번아이언', code: '5'},
+                        {club: '6번아이언', code: '6'},
+                        {club: '7번아이언', code: '7'},
+                        {club: '8번아이언', code: '8'},
+                        {club: '9번아이언', code: '9'},
+                        {club: 'P', code: '10'},
+                        {club: 'PS', code: '11'},
+                        {club: 'S', code: '12'},
+                        {club: 'Putt', code: '13'}                        
+                    ],
+                    actList: [
+                        {act: '굿샷', code: '1'},
+                        {act: '슬라이스', code: '2'},
+                        {act: '훅', code: '3'},
+                        {act: '탑볼', code: '4'},
+                        {act: '뒷땅', code: '5'},
+                        {act: '푸쉬', code: '6'},
+                        {act: '풀', code: '7'},
+                        {act: '오비', code: '8'},
+                        {act: '헤저드', code: '9'},
+                        {act: '드로우', code: '10'},
+                        {act: '페이드', code: '11'},
+                        {act: '짧음', code: '12'},
+                        {act: '길었음', code: '13'},
+                    ],
+                    selectedClub: '',
+                    selectedAct: ''
+                },
+                methods: {
+                    addClub() {
+                        this.review = ''.concat(this.review, ' ', this.selectedClub);
+                        //console.log(this.addClub);
+                    },
+                    addAct() {
+                        this.review = ''.concat(this.review, ' ', this.selectedAct, ', ');
+                    }
+
+                }
+            })
+
+        </script>
     </body>
 </html>

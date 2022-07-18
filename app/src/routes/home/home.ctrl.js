@@ -87,7 +87,7 @@ const process = {
     },
     golfedit : (req, res) =>{
         var body = req.body;
-        db.query('update golf_tmp2 set shot = ?, putt = ?, review = ? where holeno = ?',
+        db.query('update golf_tmp3 set shot = ?, putt = ?, review = ? where holeno = ?',
             [body.shot, body.putt, body.review, req.params.id], function () {
                 res.redirect('../list')
             })
@@ -236,7 +236,7 @@ const golf = {
                 return
             }
             
-            var queryString = 'select * from golf_tmp2';
+            var queryString = 'select * from golf_tmp3';
 
             db.query(queryString, function (error, result) {
                 if (error) {
@@ -253,7 +253,7 @@ const golf = {
 
     detail : (req,res) => {
         fs.readFile('src/tmp/golfdetail.html', 'utf-8', function (error, data) {
-            db.query('select * from golf_tmp2 where holeno = ?', [req.params.hole], function (error, result) {
+            db.query('select * from golf_tmp3 where holeno = ?', [req.params.hole], function (error, result) {
 
                 res.send(ejs.render(data, {
                     data: result[0]
@@ -264,7 +264,7 @@ const golf = {
 
     edit : (req,res) => {
         fs.readFile('src/tmp/golfedit.html', 'utf-8', function (error, data) {
-            db.query('select * from golf_tmp2 where holeno = ?', [req.params.hole], function (error, result) {
+            db.query('select * from golf_tmp3 where holeno = ?', [req.params.hole], function (error, result) {
 
                 res.send(ejs.render(data, {
                     data: result[0]
