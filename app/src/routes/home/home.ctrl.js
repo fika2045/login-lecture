@@ -70,7 +70,8 @@ const process = {
 //        console.log("삽입 포스트 데이터 진행");
         var body = req.body;
 
-        db.query('insert into products(name,modelnumber,series) values (?,?,?)', [body.name, body.num, body.section], function () { 
+        db.query('insert into products(name,modelnumber,series) values (?,?,?)', [body.name, body.num, body.section], function (err) { 
+            if(err) throw err;
             //응답
             res.redirect('main');
         })
@@ -81,14 +82,16 @@ const process = {
         var body = req.body;
         
         db.query('update products set name = ?, modelnumber = ?, series = ? where id = ?',
-            [body.name, body.num, body.section, req.params.id], function () {
+            [body.name, body.num, body.section, req.params.id], function (err) {
+                if(err) throw err;
                 res.redirect('../main')
             })
     },
     golfedit : (req, res) =>{
         var body = req.body;
         db.query('update golf_tmp3 set shot = ?, putt = ?, review = ? where holeno = ?',
-            [body.shot, body.putt, body.review, req.params.id], function () {
+            [body.shot, body.putt, body.review, req.params.id], function (err) {
+                if(err) throw err;
                 res.redirect('../list')
             })
     },
@@ -189,7 +192,8 @@ const product = {
     delete : (req, res) =>{
         console.log("삭제 진행");
     
-        db.query('delete from products where id = ?', [req.params.id], function () {
+        db.query('delete from products where id = ?', [req.params.id], function (err) {
+            if(err) throw err;
             res.redirect('/product/main')
         });
     },
@@ -207,6 +211,7 @@ const product = {
     
         fs.readFile('src/tmp/edit.html', 'utf-8', function (error, data) {
             db.query('select * from products where id = ?', [req.params.id], function (error, result) {
+                if(error) throw error;
                 res.send(ejs.render(data, {
                     data: result[0]
                 }))
@@ -220,6 +225,7 @@ const product = {
     
         fs.readFile('src/tmp/detail.html', 'utf-8', function (error, data) {
             db.query('select * from products where id = ?', [req.params.id], function (error, result) {
+                if(error) throw error;
                 res.send(ejs.render(data, {
                     data: result[0]
                 }))
@@ -254,7 +260,8 @@ const golf = {
     detail : (req,res) => {
         fs.readFile('src/tmp/golfdetail.html', 'utf-8', function (error, data) {
             db.query('select * from golf_tmp3 where holeno = ?', [req.params.hole], function (error, result) {
-
+                if(error) throw error;
+               
                 res.send(ejs.render(data, {
                     data: result[0]
                 }))
@@ -265,7 +272,7 @@ const golf = {
     edit : (req,res) => {
         fs.readFile('src/tmp/golfedit.html', 'utf-8', function (error, data) {
             db.query('select * from golf_tmp3 where holeno = ?', [req.params.hole], function (error, result) {
-
+                if(error) throw error;
                 res.send(ejs.render(data, {
                     data: result[0]
                 }))
@@ -275,6 +282,16 @@ const golf = {
      
 }
 
+// connection.connect();
+
+// connection.query('SELECT * from table1 where id = 2',  function(err, rows, fields) {
+//   if (err) return console.log(err);
+
+//   if (rows[0]) { 
+//     console.log('The result is  ', rows[0].user);
+//   }
+// });
+// connection.end();
 
 module.exports = {
     output,
