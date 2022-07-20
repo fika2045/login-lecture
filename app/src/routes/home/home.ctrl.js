@@ -4,7 +4,7 @@
 //const { response } = require("../../../app");
 const UserStorage = require("../../models/UserStorage");
 const User = require("../../models/User");
-const db = require("../../config/db");
+const getConnection = require("../../config/db");
 var fs = require('fs');
 var ejs = require('ejs');
 //const { addListener } = require("../../config/db");
@@ -69,31 +69,42 @@ const process = {
     insert : (req, res) =>{
 //        console.log("삽입 포스트 데이터 진행");
         var body = req.body;
-
-        db.query('insert into products(name,modelnumber,series) values (?,?,?)', [body.name, body.num, body.section], function (err) { 
-            if(err) throw err;
-            //응답
-            res.redirect('main');
-        })
+        
+        getConnection((conn) =>{
+            conn.query('insert into products(name,modelnumber,series) values (?,?,?)', [body.name, body.num, body.section], function (err) { 
+                if(err) throw err;
+                //응답
+                res.redirect('main');
+            })
+            conn.release();
+        });
     },
     
     edit : (req, res) =>{
         console.log("수정 포스트 진행");
         var body = req.body;
         
-        db.query('update products set name = ?, modelnumber = ?, series = ? where id = ?',
+        getConnection((conn) =>{
+
+             conn.query('update products set name = ?, modelnumber = ?, series = ? where id = ?',
             [body.name, body.num, body.section, req.params.id], function (err) {
                 if(err) throw err;
                 res.redirect('../main')
-            })
+            });
+            conn.release();
+        });
     },
     golfedit : (req, res) =>{
         var body = req.body;
-        db.query('update golf_tmp3 set shot = ?, putt = ?, review = ? where holeno = ?',
-            [body.shot, body.putt, body.review, req.params.id], function (err) {
-                if(err) throw err;
-                res.redirect('../list')
-            })
+        getConnection((conn) =>{
+
+            conn.query('update golf_tmp3 set shot = ?, putt = ?, review = ? where holeno = ?',
+                [body.shot, body.putt, body.review, req.params.id], function (err) {
+                    if(err) throw err;
+                    res.redirect('../list')
+                })
+            conn.release();
+        });
     },
 
 }
@@ -113,8 +124,10 @@ const product = {
     //전체 게시물의 숫자    
     var totalPageCount = 0;
 
-    var queryString = 'select count(*) as cnt from products'    
-    db.query(queryString, function (error2, data) {
+    var queryString = 'select count(*) as cnt from products' 
+    getConnection((conn) =>{
+
+    conn.query(queryString, function (error2, data) {
         if (error2) {
             console.log(error2 + "메인 화면 mysql 조회 실패");
             return;
@@ -166,7 +179,8 @@ const product = {
             console.log("몇번부터 몇번까지냐~~~~~~~" + no)
             
             var queryString = 'select * from products order by id desc limit ?,?';
-            db.query(queryString, [no, page_size], function (error, result) {
+
+            conn.query(queryString, [no, page_size], function (error, result) {
                 if (error) {
                     console.log("페이징 에러" + error);
                     return
@@ -179,7 +193,8 @@ const product = {
             });
         });
     })
-
+    conn.release();
+});   
     },
 
     main : (req, res) =>{
@@ -192,9 +207,13 @@ const product = {
     delete : (req, res) =>{
         console.log("삭제 진행");
     
-        db.query('delete from products where id = ?', [req.params.id], function (err) {
-            if(err) throw err;
-            res.redirect('/product/main')
+        getConnection((conn) =>{
+
+            conn.query('delete from products where id = ?', [req.params.id], function (err) {
+                if(err) throw err;
+                res.redirect('/product/main')
+            });
+            conn.release();
         });
     },
 
@@ -210,12 +229,16 @@ const product = {
         console.log("수정 진행")
     
         fs.readFile('src/tmp/edit.html', 'utf-8', function (error, data) {
-            db.query('select * from products where id = ?', [req.params.id], function (error, result) {
-                if(error) throw error;
-                res.send(ejs.render(data, {
-                    data: result[0]
-                }))
-            })
+            getConnection((conn) =>{
+
+                conn.query('select * from products where id = ?', [req.params.id], function (error, result) {
+                    if(error) throw error;
+                    res.send(ejs.render(data, {
+                        data: result[0]
+                    }))
+                })
+                conn.release();
+            });
         });
     
     },
@@ -224,12 +247,16 @@ const product = {
         console.log("상세 페이지")
     
         fs.readFile('src/tmp/detail.html', 'utf-8', function (error, data) {
-            db.query('select * from products where id = ?', [req.params.id], function (error, result) {
-                if(error) throw error;
-                res.send(ejs.render(data, {
-                    data: result[0]
-                }))
-            })
+            getConnection((conn) =>{
+
+                conn.query('select * from products where id = ?', [req.params.id], function (error, result) {
+                    if(error) throw error;
+                    res.send(ejs.render(data, {
+                        data: result[0]
+                    }))
+                })
+                conn.release();
+            });
         });
     }
 }
@@ -244,39 +271,51 @@ const golf = {
             
             var queryString = 'select * from golf_tmp3';
 
-            db.query(queryString, function (error, result) {
-                if (error) {
-                    console.log("페이징 에러" + error);
-                    return
-                }
-                //console.log(result);
-                res.send(ejs.render(data, {
-                    data: result
-                }));
+            getConnection((conn) =>{
+
+                conn.query(queryString, function (error, result) {
+                    if (error) {
+                        console.log("페이징 에러" + error);
+                        return
+                    }
+                    //console.log(result);
+                    res.send(ejs.render(data, {
+                        data: result
+                    }));
+                });
+                conn.release();
             });
         })
     },
 
     detail : (req,res) => {
         fs.readFile('src/tmp/golfdetail.html', 'utf-8', function (error, data) {
-            db.query('select * from golf_tmp3 where holeno = ?', [req.params.hole], function (error, result) {
-                if(error) throw error;
-               
-                res.send(ejs.render(data, {
-                    data: result[0]
-                }))
-            })
+            getConnection((conn) =>{
+
+                conn.query('select * from golf_tmp3 where holeno = ?', [req.params.hole], function (error, result) {
+                    if(error) throw error;
+                
+                    res.send(ejs.render(data, {
+                        data: result[0]
+                    }))
+                })
+            conn.release();
+        });
         });
     },
 
     edit : (req,res) => {
         fs.readFile('src/tmp/golfedit.html', 'utf-8', function (error, data) {
-            db.query('select * from golf_tmp3 where holeno = ?', [req.params.hole], function (error, result) {
-                if(error) throw error;
-                res.send(ejs.render(data, {
-                    data: result[0]
-                }))
-            })
+            getConnection((conn) =>{
+
+                conn.query('select * from golf_tmp3 where holeno = ?', [req.params.hole], function (error, result) {
+                    if(error) throw error;
+                    res.send(ejs.render(data, {
+                        data: result[0]
+                    }))
+                })
+                conn.release();
+            });
         });
     },
      
