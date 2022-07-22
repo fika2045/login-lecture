@@ -25,12 +25,12 @@
                     <input type="text" class="form-control" id="par" name="par" v-model ="par" disabled>
                 </div>
                 <div class="form-group">
-                    <label for="shot">Shot</label>
-                    <input type="number" class="form-control" id="shot" name="shot" v-model ="shot">
+                    <label for="shot">Shot : {{shot}}</label>
+                    <input type="range" class="form-control" id="shot" name="shot" v-model ="shot" :max = "max">
                 </div>
                 <div class="form-group">
-                    <label for="putt">Putt</label>
-                    <input type="number" class="form-control" id="putt" name="putt" v-model ="putt" >
+                    <label for="putt">Putt : {{putt}}</label>
+                    <input type="range" class="form-control" id="putt" name="putt" v-model ="putt" :max = "max">
                 </div>
                 <div class="form-group">
                     <label for="review">review</label>
@@ -68,6 +68,7 @@
                     shot :'<%=data.shot%>',
                     putt :'<%=data.putt%>',
                     review :'<%=data.review%>',
+                    max : '<%=data.par%>'*2,
                     clubList: [
                         {club: '드라이버', code: '1'},
                         {club: '우드', code: '2'},
@@ -107,7 +108,11 @@
                     },
                     addAct() {
                         this.review = ''.concat(this.review, ' ', this.selectedAct, ', ');
-                    }
+                    },
+                    // changeShot() {
+                    //     this.shot = this.iShot;
+                    // }
+
 
                 }
             })
