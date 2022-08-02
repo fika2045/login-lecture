@@ -7,6 +7,8 @@ const User = require("../../models/User");
 const getConnection = require("../../config/db");
 var fs = require('fs');
 var ejs = require('ejs');
+const ytdl = require("ytdl-core")
+
 //const { addListener } = require("../../config/db");
 
 const output = {
@@ -43,6 +45,31 @@ const output = {
             res.render("home/login");
         } else { res.render("home/login")  };
     },
+    metronome : (req, res) => {
+        if(req.session.user) {
+            res.render("home/metronome");    
+        } else { res.render("home/login")};
+  
+    },
+    youtube : (req, res) => {
+        if(req.session.user) {
+            res.render("home/youtube");    
+        } else { res.render("home/login")};
+  
+    },
+    download : (req, res) => {
+        if(req.session.user) {
+
+        let URL = req.query.URL;
+        res.header('Content-Disposition', 'attachment; filename="video.mp4"');
+
+        ytdl(URL, {
+            format: 'mp4'
+        }).pipe(res);
+    } else { res.render("home/login")};
+
+    },
+    
 }
 
 const process = {

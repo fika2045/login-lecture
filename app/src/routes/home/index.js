@@ -35,5 +35,9 @@ router.get("/golf/edit/:hole", ctrl.golf.edit);
 
 router.post("/golf/edit/:id", ctrl.process.golfedit);
 
+router.get("/metronome", ctrl.output.metronome);
+router.get("/youtube", ctrl.output.youtube);
+
+router.get("/youtube/download", ctrl.output.download);
 
 module.exports = router; 
