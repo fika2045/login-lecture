@@ -53,19 +53,26 @@ const output = {
     },
     youtube : (req, res) => {
         if(req.session.user) {
-            res.render("home/youtube");    
+        //if(1) {
+                res.render("home/youtube");    
         } else { res.render("home/login")};
   
     },
     download : (req, res) => {
+    
         if(req.session.user) {
-
-        let URL = req.query.URL;
+        //if(1) {
+                let URL = req.query.URL;
+        
         res.header('Content-Disposition', 'attachment; filename="video.mp4"');
 
         ytdl(URL, {
             format: 'mp4'
+        }).on('error', (err) => {
+            //console.log(err);
+            console.error('주소 미입력');
         }).pipe(res);
+
     } else { res.render("home/login")};
 
     },
