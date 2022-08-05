@@ -7,7 +7,10 @@ const User = require("../../models/User");
 const getConnection = require("../../config/db");
 var fs = require('fs');
 var ejs = require('ejs');
-const ytdl = require("ytdl-core")
+const ytdl = require("ytdl-core");
+const cp = require('child_process');
+//const readline = require('readline');
+const ffmpeg = require('ffmpeg-static');
 
 //const { addListener } = require("../../config/db");
 
@@ -58,20 +61,103 @@ const output = {
         } else { res.render("home/login")};
   
     },
-    download : (req, res) => {
+    download : async(req, res) => {
     
         if(req.session.user) {
         //if(1) {
-                let URL = req.query.URL;
-        
-        res.header('Content-Disposition', 'attachment; filename="video.mp4"');
+            let URL = req.query.URL;
+            
 
-        ytdl(URL, {
-            format: 'mp4'
-        }).on('error', (err) => {
-            //console.log(err);
-            console.error('주소 미입력');
-        }).pipe(res);
+            if(ytdl.validateURL(URL))
+            {
+                //highest 퀄리티로 저장하기
+                let info = await ytdl.getInfo(URL);
+                let format = ytdl.chooseFormat(info.formats, { quality: 'highest' });
+
+                res.header('Content-Disposition', 'attachment; filename="video.mp4"');
+                ytdl(URL, {
+                    format: 'mp4'
+                }).pipe(res);
+                
+                
+        //         //highestaudio + highestvideo 합치기 근데 서버에 저장되네 ㅠㅜ
+        //         const ref = URL;
+        //         const tracker = {
+        //           start: Date.now(),
+        //           audio: { downloaded: 0, total: Infinity },
+        //           video: { downloaded: 0, total: Infinity },
+        //           merged: { frame: 0, speed: '0x', fps: 0 },
+        //         };
+                
+        //         // Get audio and video streams
+        //         const audio = ytdl(ref, { quality: 'highestaudio' })
+        //           .on('progress', (_, downloaded, total) => {
+        //             tracker.audio = { downloaded, total };
+        //           });
+        //         const video = ytdl(ref, { quality: 'highestvideo' })
+        //           .on('progress', (_, downloaded, total) => {
+        //             tracker.video = { downloaded, total };
+        //           });
+                
+        //         // Prepare the progress bar
+        //         let progressbarHandle = null;
+        //         const progressbarInterval = 1000;
+                
+                
+        //         // Start the ffmpeg child process
+        //         const ffmpegProcess = cp.spawn(ffmpeg, [
+        //           // Remove ffmpeg's console spamming
+        //           '-loglevel', '8', '-hide_banner',
+        //           // Redirect/Enable progress messages
+        //           '-progress', 'pipe:3',
+        //           // Set inputs
+        //           '-i', 'pipe:4',
+        //           '-i', 'pipe:5',
+        //           // Map audio & video from streams
+        //           '-map', '0:a',
+        //           '-map', '1:v',
+        //           // Keep encoding
+        //           '-c:v', 'copy',
+        //           // Define output file
+        //           'out2.mkv',
+        //         ], {
+        //           windowsHide: true,
+        //           stdio: [
+        //             /* Standard: stdin, stdout, stderr */
+        //             'inherit', 'inherit', 'inherit',
+        //             /* Custom: pipe:3, pipe:4, pipe:5 */
+        //             'pipe', 'pipe', 'pipe',
+        //           ],
+        //         });
+        //         ffmpegProcess.on('close', () => {
+        //           console.log('done');
+        //           // Cleanup
+        //   //        process.stdout.write('\n\n\n\n');
+        //           clearInterval(progressbarHandle);
+        //         });
+                
+        //         // Link streams
+        //         // FFmpeg creates the transformer streams and we just have to insert / read data
+        //         ffmpegProcess.stdio[3].on('data', chunk => {
+        //           // Start the progress bar
+        //           //if (!progressbarHandle) progressbarHandle = setInterval(showProgress, progressbarInterval);
+        //           // Parse the param=value list returned by ffmpeg
+        //           const lines = chunk.toString().trim().split('\n');
+        //           const args = {};
+        //           for (const l of lines) {
+        //             const [key, value] = l.split('=');
+        //             args[key.trim()] = value.trim();
+        //           }
+        //           tracker.merged = args;
+        //         });
+        //         audio.pipe(ffmpegProcess.stdio[4]);
+        //         video.pipe(ffmpegProcess.stdio[5]);
+
+            }
+            else {
+                res.send('<script>location.href="/youtube";alert("하하하");</script>');
+            }
+     
 
     } else { res.render("home/login")};
 
@@ -83,6 +169,7 @@ const process = {
     login : async (req, res) => {
         const user = new User(req.body);
         const response = await user.login();
+
         
          req.session.user = {
              id: response.id,
